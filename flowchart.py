@@ -13,7 +13,9 @@ def append(user):
             numbers.append(int(n))
 
 
-user_numbers = input("Hi! Give me some numbers, serapated by comma: ")
+user_numbers = input(
+    "Hi! Give me some numbers serapated by comma (eg. 1,2,3,4): "
+)
 append(user_numbers)
 N = len(numbers)
 
