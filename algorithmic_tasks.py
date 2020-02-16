@@ -1,3 +1,4 @@
+import re
 import io
 import sys
 import os
@@ -31,10 +32,57 @@ except (IndexError, ValueError):
     print("Specify two integers in command line to calculate the divisor.")
 
 
+# PRESENT PARTICIPLE
+try:
+    if "." not in sys.argv[1]:
+        str(sys.argv[1].split())
+        vowels = ["e", "y", "u", "i", "o", "a"]
+        count = 1
+        while sys.argv[count]:
+            if not any(i.isdigit() for i in sys.argv[count]):
+                word = sys.argv[count].lower()
+                ending = re.sub(r"^.*(...)$", r"\g<1>", word)
+                if word.endswith("ie"):
+                    ing_word = re.sub(r"^(.+)ie$", r"\g<1>ying", word)
+                elif word.endswith("c"):
+                    ing_word = word + "king"
+                elif (
+                    (
+                        ending[0] not in vowels
+                        and ending[1] in vowels
+                        and ending.endswith(("w", "x", "y"))
+                    )
+                    or word == "be"
+                    or word.endswith(("ee", "ye", "oe", "nge"))
+                    or (
+                        ending[0] in vowels
+                        and ending[1] in vowels
+                        and ending[2] not in vowels
+                    )
+                ):
+                    ing_word = word + "ing"
+                elif (
+                    ending[0] not in vowels
+                    and ending[1] in vowels
+                    and ending[2] not in vowels
+                ):
+                    ing_word = re.sub(
+                        r"^(.+)(.)$", r"\g<1>\g<2>\g<2>ing", word
+                    )
+                elif ending[1] not in vowels and word.endswith("e"):
+                    ing_word = re.sub(r"^(.+)e$", r"\g<1>ing", word)
+                else:
+                    ing_word = word + "ing"
+                print(word, "-->", ing_word)
+            count += 1
+except (IndexError, ValueError):
+    pass
+
+
 # ANAGRAMS
-script_path = os.path.dirname(os.path.normpath(__file__))
 try:
     if "." in sys.argv[1]:
+        script_path = os.path.dirname(os.path.normpath(__file__))
         anagram_file = os.path.join(script_path, sys.argv[1])
         anagram_bank = []
         printed = []
